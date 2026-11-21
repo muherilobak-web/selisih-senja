@@ -1,0 +1,92 @@
+/* Selisih Senja — gaya antarmuka. Palet hangat senja: ungu tua, oranye, krem. */
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0; font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+  background: linear-gradient(180deg, #2b1a4d 0%, #5b2a6e 45%, #c65d3b 100%);
+  color: #fff7e8; min-height: 100vh;
+}
+#app { max-width: 1280px; margin: 0 auto; padding: 8px 10px 10px; min-height: 100vh; display: flex; flex-direction: column; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: rgba(20, 10, 40, 0.55); border: 2px solid rgba(255, 200, 120, 0.5);
+  border-radius: 14px; padding: 6px 12px; margin-bottom: 8px; flex-wrap: wrap;
+}
+.brand { font-size: 26px; font-weight: bold; color: #ffd98a; letter-spacing: 0.5px; white-space: nowrap; }
+.hud { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 17px; }
+.hud-item strong { color: #ffd98a; font-size: 20px; }
+#hud-time.low { color: #ff6b5e; animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0.45; } }
+.hud-dots { display: inline-flex; gap: 5px; }
+.hud-dots .dot {
+  width: 13px; height: 13px; border-radius: 50%;
+  background: rgba(255,255,255,0.25); border: 2px solid #ffd98a; display: inline-block;
+}
+.hud-dots .dot.found { background: #ffd23e; }
+.btn {
+  font-family: inherit; cursor: pointer; border: 2px solid #ffd98a; border-radius: 10px;
+  background: #3d2358; color: #fff7e8; padding: 8px 14px; font-size: 16px; font-weight: bold;
+}
+.btn:hover { background: #5b2a6e; }
+.btn.primary { background: #e07b39; border-color: #ffd98a; color: #fff; }
+.btn.primary:hover { background: #f08c46; }
+.btn.big { font-size: 19px; padding: 12px 22px; }
+.btn.small { font-size: 15px; padding: 6px 10px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+#stage { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.panels { display: flex; gap: 10px; justify-content: center; }
+.panel-wrap { flex: 1; min-width: 0; text-align: center; }
+.panel-label {
+  font-size: 18px; font-weight: bold; color: #ffd98a; margin-bottom: 5px;
+  background: rgba(20,10,40,0.55); border-radius: 8px; padding: 3px 0;
+}
+canvas { border-radius: 12px; border: 3px solid #ffd98a; background: #222; max-width: 100%; height: auto; display: block; margin: 0 auto; }
+#canvas-left, #canvas-right { cursor: crosshair; width: 100%; height: auto; }
+.focus-bar { display: none !important; }
+#focus-name { color: #ffd23e; font-weight: bold; margin-left: 8px; }
+.screen { text-align: center; padding: 18px 10px; }
+.screen.overlay {
+  position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
+  background: rgba(20, 8, 38, 0.72); border-radius: 14px;
+}
+.screen[hidden] { display: none; }
+.menu-hero h1 {
+  font-size: 64px; margin: 6px 0 4px; color: #ffd98a;
+  text-shadow: 0 3px 0 #7a3b12, 0 6px 18px rgba(0,0,0,0.5);
+}
+.tagline { font-size: 20px; margin: 4px 0 16px; }
+#menu-canvas { border-color: rgba(255,217,138,0.7); }
+.menu-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+.best { font-size: 17px; }
+.tiny { font-size: 14px; opacity: 0.85; }
+.card {
+  background: rgba(30, 16, 58, 0.92); border: 2px solid #ffd98a; border-radius: 16px;
+  padding: 22px 26px; max-width: 640px; margin: 0 auto; text-align: left;
+}
+.card.wide { max-width: 860px; }
+.card h2 { text-align: center; color: #ffd98a; font-size: 30px; margin: 4px 0 12px; }
+.card p { text-align: center; font-size: 17px; }
+.howto-list { font-size: 17px; line-height: 1.55; }
+.howto-demo { text-align: center; margin: 12px 0; }
+.howto-demo canvas { display: inline-block; width: 260px; margin: 0 6px; }
+.level-cards { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+.level-card {
+  width: 250px; background: #2b1a4d; border: 2px solid #ffd98a; border-radius: 12px;
+  padding: 10px; text-align: center; cursor: pointer;
+}
+.level-card.locked { opacity: 0.55; cursor: not-allowed; }
+.level-card:hover:not(.locked) { background: #3d2358; }
+.level-card canvas { width: 100%; border-width: 2px; }
+.level-card h3 { margin: 8px 0 2px; color: #ffd98a; font-size: 20px; }
+.level-card p { margin: 3px 0; font-size: 15px; }
+.stars { font-size: 44px; color: #ffd23e; letter-spacing: 6px; text-align: center; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+.score-table { margin: 10px auto; font-size: 18px; border-collapse: collapse; }
+.score-table td { padding: 5px 14px; }
+.score-table td:last-child { text-align: right; font-weight: bold; color: #ffd98a; }
+.score-table tr.total td { border-top: 2px solid #ffd98a; font-size: 21px; }
+#victory-stars { text-align: center; font-size: 17px; line-height: 1.8; margin: 8px 0; }
+@media (max-width: 900px) {
+  .panels { flex-direction: column; align-items: center; }
+  .menu-hero h1 { font-size: 42px; }
+  .brand { font-size: 21px; }
+}

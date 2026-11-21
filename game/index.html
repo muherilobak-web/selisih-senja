@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selisih Senja — Cari Perbedaan</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar" title="Klik perbedaan di panel • Panah: pindah sorot • Enter: pilih • H: petunjuk • P: jeda • M: bisu">
+    <div class="brand">🌇 Selisih Senja</div>
+    <div class="hud" id="hud" hidden>
+      <span class="hud-item" id="hud-level">Level 1</span>
+      <span class="hud-item">Sisa: <strong id="hud-remaining">8</strong> / <span id="hud-total">8</span></span>
+      <span class="hud-dots" id="hud-dots" aria-label="Penanda perbedaan"></span>
+      <span class="hud-item">Waktu: <strong id="hud-time">120</strong> dtk</span>
+      <span class="hud-item">Skor: <strong id="hud-score">0</strong></span>
+      <button class="btn small" id="btn-hint" type="button">💡 Petunjuk (<span id="hint-count">3</span>)</button>
+      <button class="btn small" id="btn-mute" type="button">🔊 Suara</button>
+      <button class="btn small" id="btn-pause" type="button">⏸ Jeda</button>
+    </div>
+  </header>
+
+  <main id="stage">
+    <div class="panels" id="panels" hidden>
+      <div class="panel-wrap">
+        <div class="panel-label">Kiri</div>
+        <canvas id="canvas-left" width="560" height="420" tabindex="0" aria-label="Panel kiri"></canvas>
+      </div>
+      <div class="panel-wrap">
+        <div class="panel-label">Kanan</div>
+        <canvas id="canvas-right" width="560" height="420" tabindex="0" aria-label="Panel kanan"></canvas>
+      </div>
+    </div>
+
+    <div class="focus-bar" id="focus-bar" hidden>
+      <span id="focus-text">Sorot keyboard: gunakan tombol panah untuk pindah, Enter untuk memilih.</span>
+      <span id="focus-name"></span>
+    </div>
+
+    <!-- MENU UTAMA -->
+    <section class="screen" id="screen-menu">
+      <div class="menu-hero">
+        <canvas id="menu-canvas" width="560" height="220"></canvas>
+        <h1>Selisih Senja</h1>
+        <p class="tagline">Temukan semua perbedaan di dua gambar yang nyaris sama — sebelum waktu habis!</p>
+        <div class="menu-buttons">
+          <button class="btn big primary" id="btn-play" type="button">▶ Mulai Bermain</button>
+          <button class="btn big" id="btn-howto" type="button">📖 Cara Bermain</button>
+          <button class="btn big" id="btn-levels" type="button">🗺 Pilih Level</button>
+        </div>
+        <p class="best">Skor terbaik: <strong id="best-score">0</strong> &nbsp;•&nbsp; Tiga level: Pasar Senja, Pantai Pagi, Hutan Kabut</p>
+        <p class="tiny">Mouse atau keyboard — semua bisa. Klik salah mengurangi waktu 5 detik.</p>
+      </div>
+    </section>
+
+    <!-- CARA BERMAIN -->
+    <section class="screen" id="screen-howto" hidden>
+      <div class="card">
+        <h2>Cara Bermain</h2>
+        <ol class="howto-list">
+          <li>Lihat dua gambar berdampingan. Keduanya hampir sama — tapi ada beberapa perbedaan.</li>
+          <li><strong>Klik perbedaan</strong> di panel kiri atau kanan. Yang ketemu dilingkari kuning di kedua panel.</li>
+          <li>Penghitung di atas menunjukkan sisa perbedaan. Temukan semuanya sebelum waktu habis.</li>
+          <li><strong>Petunjuk (H):</strong> menyorot satu perbedaan yang belum ketemu selama 3 detik, biaya 50 poin. Tersedia 3 kali per level.</li>
+          <li><strong>Klik salah:</strong> muncul tanda silang dan waktu berkurang 5 detik. Hati-hati!</li>
+          <li><strong>Keyboard:</strong> tombol panah memindahkan sorot, Enter memilih, H petunjuk, P jeda, M bisu.</li>
+        </ol>
+        <div class="howto-demo">
+          <canvas id="howto-canvas-left" width="260" height="170"></canvas>
+          <canvas id="howto-canvas-right" width="260" height="170"></canvas>
+          <p class="tiny">Contoh: kucing di panel kiri hilang di panel kanan — sudah dilingkari.</p>
+        </div>
+        <button class="btn big primary" id="btn-howto-back" type="button">Kembali ke Menu</button>
+      </div>
+    </section>
+
+    <!-- PILIH LEVEL -->
+    <section class="screen" id="screen-levels" hidden>
+      <div class="card wide">
+        <h2>Pilih Level</h2>
+        <div class="level-cards" id="level-cards"></div>
+        <button class="btn big" id="btn-levels-back" type="button">Kembali ke Menu</button>
+      </div>
+    </section>
+
+    <!-- JEDA -->
+    <section class="screen overlay" id="screen-pause" hidden>
+      <div class="card">
+        <h2>Jeda</h2>
+        <p>Istirahat sejenak. Waktu berhenti saat jeda.</p>
+        <div class="menu-buttons">
+          <button class="btn big primary" id="btn-resume" type="button">▶ Lanjut</button>
+          <button class="btn big" id="btn-restart-level" type="button">↻ Ulangi Level</button>
+          <button class="btn big" id="btn-quit-menu" type="button">🏠 Menu Utama</button>
+        </div>
+        <button class="btn" id="btn-pause-mute" type="button">🔊 Suara: nyala</button>
+      </div>
+    </section>
+
+    <!-- LEVEL SELESAI -->
+    <section class="screen overlay" id="screen-complete" hidden>
+      <div class="card">
+        <h2>🎉 Level Selesai!</h2>
+        <div class="stars" id="complete-stars">★★★</div>
+        <p id="complete-level-name">Pasar Senja</p>
+        <table class="score-table">
+          <tr><td>Perbedaan ditemukan</td><td id="score-diff">800</td></tr>
+          <tr><td>Bonus waktu sisa</td><td id="score-time">+0</td></tr>
+          <tr><td>Bonus tanpa kesalahan</td><td id="score-clean">+0</td></tr>
+          <tr class="total"><td>Skor level</td><td id="score-level-total">0</td></tr>
+          <tr><td>Skor total</td><td id="score-grand-total">0</td></tr>
+        </table>
+        <div class="menu-buttons">
+          <button class="btn big primary" id="btn-next-level" type="button">➡ Level Berikutnya</button>
+          <button class="btn big" id="btn-replay-level" type="button">↻ Ulangi Level</button>
+          <button class="btn big" id="btn-complete-menu" type="button">🏠 Menu Utama</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL GAGAL -->
+    <section class="screen overlay" id="screen-fail" hidden>
+      <div class="card">
+        <h2>⏰ Waktu Habis</h2>
+        <p id="fail-text">Kamu menemukan 3 dari 8 perbedaan. Hampir sampai — coba lagi!</p>
+        <div class="menu-buttons">
+          <button class="btn big primary" id="btn-retry-level" type="button">↻ Coba Lagi</button>
+          <button class="btn big" id="btn-fail-menu" type="button">🏠 Menu Utama</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MENANG AKHIR -->
+    <section class="screen overlay" id="screen-victory" hidden>
+      <div class="card wide">
+        <h2>🏆 Selamat! Semua Level Selesai!</h2>
+        <p class="tagline">Kamu menemukan semua perbedaan di Pasar Senja, Pantai Pagi, dan Hutan Kabut.</p>
+        <div class="stars">★★★</div>
+        <p>Total skor: <strong id="victory-score">0</strong></p>
+        <p>Total waktu bermain: <strong id="victory-time">0</strong> detik</p>
+        <div id="victory-stars"></div>
+        <div class="menu-buttons">
+          <button class="btn big primary" id="btn-play-again" type="button">▶ Main Lagi dari Awal</button>
+          <button class="btn big" id="btn-victory-menu" type="button">🏠 Menu Utama</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="js/levels.js"></script>
+<script src="js/scene-renderer.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/game-logic.js"></script>
+<script src="js/screens.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
